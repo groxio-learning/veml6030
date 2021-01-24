@@ -11,16 +11,21 @@ defmodule VEML6030 do
       |> Map.take([:gain, :int_time, :shutdown, :interrupt])
       |> Config.new
       
-    Comm.write_config(i2c, address, config)
+    Comm.write_config(config, i2c, address)
     :timer.send_interval(1_000, :tick)
       
     {:ok, %{i2c: i2c, address: address, config: config, last_reading: :no_reading}}
   end
   def init(args) do
     {bus_name, address} = Comm.discover()
-    Logger.warn("Please specify an address or bus.")
-    Logger.info(" Starting on #{address} #{bus_name}")
-    init(%{args|address: address, i2c_bus_name: bus_name})
+    transport = "bus: #{bus_name}, address: #{address}"
+    Logger.info("Starting VEML6030. Please specify both an address and a bus.")
+    Logger.info("Starting on " <> transport)
+    init(
+      args 
+      |> Map.put(:address, address) 
+      |> Map.put(:i2c_bus_name, bus_name)
+    )
   end
   
   def handle_info(:tick, %{i2c: i2c, address: address, config: config}=state) do
