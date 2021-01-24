@@ -14,7 +14,7 @@ defmodule VEML6030.Comm do
   end
   
   def write_config(configuration, i2c, sensor) do
-    command = Config.to_command(configuration)
+    command = Config.to_integer(configuration)
     Circuits.I2C.write(i2c, sensor, <<0, command::little-16>>)
   end
   
