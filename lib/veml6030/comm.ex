@@ -1,12 +1,9 @@
-defmodule Veml6030.Comm do
+defmodule VEML6030.Comm do
   alias Circuits.I2C
-  alias Veml6030.Config
+  alias VEML6030.Config
   
   @light_register <<4>>
 
-  def quick_configuration, do: Config.new
-  def config(options), do: Config.new(options)
-  
   def discover(possible_addresses \\ [0x10, 0x48]) do
     I2C.discover_one!(possible_addresses)
   end

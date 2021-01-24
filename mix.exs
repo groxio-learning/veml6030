@@ -1,4 +1,4 @@
-defmodule Veml6030.MixProject do
+defmodule VEML6030.MixProject do
   use Mix.Project
 
   def project do

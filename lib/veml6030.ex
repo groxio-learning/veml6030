@@ -11,7 +11,7 @@ defmodule VEML6030 do
       |> Map.take([:gain, :int_time, :shutdown, :interrupt])
       |> Config.new
       
-    Comm.write_config(config)
+    Comm.write_config(i2c, address, config)
     :timer.send_interval(1_000, :tick)
       
     {:ok, %{i2c: i2c, address: address, config: config, last_reading: :no_reading}}
