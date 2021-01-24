@@ -29,16 +29,14 @@ defmodule VEML6030 do
   end
   
   def handle_info(:tick, %{i2c: i2c, address: address, config: config}=state) do
-    reading = Comm.read(i2c, address, config)
-    
-    {:noreply, Map.put(state, :state, last_reading: reading)}
+    {:noreply, %{state| last_reading: Comm.read(i2c, address, config)}}
   end
   
   def handle_call(:measure, _from, state) do
-    {:reply, state.last_reading, }
+    {:reply, state.last_reading, state}
   end
   
-  def start_link(options) do
+  def start_link(options \\ %{}) do
     GenServer.start_link(__MODULE__, options, name: __MODULE__)
   end
   
